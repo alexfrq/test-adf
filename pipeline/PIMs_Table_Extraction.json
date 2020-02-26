@@ -77,8 +77,8 @@
 			"PIMsTableToBeExtracted": {
 				"type": "Array",
 				"defaultValue": [
-					"Product",
-					"Customer"
+					"SalesLT.Product",
+					"SalesLT.Customer"
 				]
 			}
 		},
