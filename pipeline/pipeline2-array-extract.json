@@ -1,6 +1,21 @@
 {
 	"name": "pipeline2-array-extract",
 	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('tablelist')",
+						"type": "Expression"
+					},
+					"batchCount": 1
+				}
+			}
+		],
 		"variables": {
 			"tablelist": {
 				"type": "Array",
