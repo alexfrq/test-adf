@@ -1,0 +1,97 @@
+{
+	"name": "PIMs_Table_Extraction",
+	"properties": {
+		"activities": [
+			{
+				"name": "For_Each_Table",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('PIMsTableToBeExtracted')",
+						"type": "Expression"
+					},
+					"batchCount": 5,
+					"activities": [
+						{
+							"name": "Copy_Table_To_Datalake_parquet",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "OracleSource",
+									"oracleReaderQuery": {
+										"value": "@concat('select *  from ', item())",
+										"type": "Expression"
+									},
+									"partitionOption": "None",
+									"queryTimeout": "02:00:00"
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "PiMs_Dataset",
+									"type": "DatasetReference",
+									"parameters": {
+										"secretName": {
+											"value": "@pipeline().parameters.connectionSecretName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Datalake_parquet_snappy",
+									"type": "DatasetReference",
+									"parameters": {
+										"FolderPrefix": "HR",
+										"TableName": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"concurrency": 1,
+		"parameters": {
+			"connectionSecretName": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"PIMsTableToBeExtracted": {
+				"type": "Array",
+				"defaultValue": [
+					"Product",
+					"Customer"
+				]
+			}
+		},
+		"folder": {
+			"name": "HR"
+		},
+		"annotations": []
+	}
+}
