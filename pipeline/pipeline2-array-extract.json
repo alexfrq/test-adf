@@ -1,0 +1,15 @@
+{
+	"name": "pipeline2-array-extract",
+	"properties": {
+		"variables": {
+			"tablelist": {
+				"type": "Array",
+				"defaultValue": [
+					"Product",
+					"Customer"
+				]
+			}
+		},
+		"annotations": []
+	}
+}
